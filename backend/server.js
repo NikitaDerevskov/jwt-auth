@@ -1,6 +1,6 @@
 const express = require('express');
 const path = require('path');
-const bodyParse = require('body-parser');
+const bodyParser = require('body-parser');
 const session = require('express-session');
 const cors = require('cors');
 const mongoose = require('mongoose');
@@ -22,21 +22,42 @@ app.use(session({secret: 'jwt-auth', cookie:  {maxAge: 6000}, resave: false, sav
 
 /*  */
 
+/* Work with db */
+
+mongoose.connect('mongodb://localhost/jwt-auth');
+mongoose.set('debug', true);
+
+/*  */
+
+if(!isProduction) {
+  app.use((err, req, res) => {
+    res.status(err.status || 500);
+
+    res.json({
+      errors: {
+        message: err.message,
+        error: err,
+      },
+    });
+  });
+}
+
 
 if (isProduction) {
 	app.use(errorHandler());
+	app.use((err, req, res) => {
+		res.status(err.status | 500);
+
+		res.json({
+			errors: {
+				message: err.message,
+				error: {}
+			}
+		})
+	});
 }
 
-app.use((err, req, res) => {
-	res.status(err.status | 500);
 
-	res.json({
-		errors: {
-			message: err.message,
-			error: {}
-		}
-	})
-});
 
 
 app.listen(8000, () => console.log("server run on localhost:8000"))
