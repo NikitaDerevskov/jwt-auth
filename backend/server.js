@@ -8,6 +8,9 @@ const errorHandler = require('errorHandler');
 
 const app = express();
 
+
+const isProduction = process.env.NODE_ENV === 'production';
+
 /*  Configurate app */
 
 app.use(cors()); // Для работы с cors
@@ -18,6 +21,11 @@ app.use(express.static(path.join(__dirname, 'public'))); // для работы 
 app.use(session({secret: 'jwt-auth', cookie:  {maxAge: 6000}, resave: false, saveUninitialized: false})); // для работы с сессиями (maxAge - длительность жизни)
 
 /*  */
+
+
+if (isProduction) {
+	app.use(errorHandler());
+}
 
 app.use((err, req, res) => {
 	res.status(err.status | 500);
