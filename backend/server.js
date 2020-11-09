@@ -27,9 +27,11 @@ app.use(session({secret: 'jwt-auth', cookie:  {maxAge: 6000}, resave: false, sav
 mongoose.connect('mongodb://localhost/jwt-auth');
 mongoose.set('debug', true);
 require('./models/Users');
-require('./config/password');
+require('./config/passport');
 
 /*  */
+
+app.use(require('./routes'));
 
 if(!isProduction) {
   app.use((err, req, res) => {
