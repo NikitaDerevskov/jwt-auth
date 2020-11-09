@@ -22,7 +22,7 @@ const auth = {
         userProperty: 'payload',
         getToken: getTokenFromHeaders,
         credentialsRequired: false
-    });
+    })
 }
 
 module.exports = auth;
