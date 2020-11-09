@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const passport = require('passport');
-const router = require('express').Router();
+const express = require('express');
+const router = express.Router();
+
 const auth = require('../auth');
 const Users = mongoose.model('Users');
 
@@ -55,17 +57,17 @@ router.post('/login', auth.optional, (req, res, next) => {
 });
 
 // GET current route (requierd, only authenticated users have acess)
-router.get('/current', auth.requierd, (req, res, next) => {
-    const { payload: { id } } = req;
+// router.get('/current', auth.requierd, (req, res, next) => {
+//     const { payload: { id } } = req;
 
-    return Users.findById(id)
-    .then((user) => {
-        if (!user) {
-            return res.sendStatus(400);
-        }
+//     return Users.findById(id)
+//     .then((user) => {
+//         if (!user) {
+//             return res.sendStatus(400);
+//         }
 
-        return res.json({ user: user.toAuthJSON() });
-    });
-});
+//         return res.json({ user: user.toAuthJSON() });
+//     });
+// });
 
 module.exports = router;
